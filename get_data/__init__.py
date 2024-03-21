@@ -21,29 +21,6 @@ def get_val_or_error(request, key):
     return val
 
 
-# def main(req: func.HttpRequest) -> func.HttpResponse:
-#     logging.info('Python HTTP trigger function processed a request.')
-
-#     try:
-#         latitude = get_val_or_error(req, 'lat')
-#         longitude = get_val_or_error(req, 'long')
-#     except ValueError as e:
-#         return func.HttpResponse(str(e), status_code=400)
-    
-#     # todo store API more secur
-#     api_key = "044d96d0a9150903ca5e80fc1a5da8e7"
-
-#     try:
-
-#         url = f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key}"
-#         response = requests.get(url)
-#         data = response.json()
-#     except Exception as e:
-#         return func.HttpResponse(str(e), status_code=500)
-    
-#     return func.HttpResponse(json.dumps(data), status_code=200)
-
-
 def main(req: func.HttpRequest) -> func.HttpResponse:
     # connect to the database
     try:
@@ -190,10 +167,10 @@ def update_city_in_db(cursor, cnx, city, latitude, longitude, max_temp, max_humi
 def check_red_flags(data):
     try:
         print("Calling Data Analyitcs Function")
-        # requests.post("http://gateway:8080/function/data-calc", json=data)
+        requests.post("https://sc20jdpn-cw2-funcapp.azurewebsites.net/api/data-calc", json=data)
         # call red-flags function
         print("Calling Reporting Function")
-        # requests.post("http://gateway:8080/function/red-flags", json=data)
+        requests.post("https://sc20jdpn-cw2-funcapp.azurewebsites.net/api/red-flags", json=data)
     except Exception as e:
         return func.HttpResponse(
             "Error calling functions: " + str(e),
